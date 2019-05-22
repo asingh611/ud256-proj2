@@ -36,4 +36,13 @@ def find_files(suffix, path):
 path_to_check = "testdir"
 extension_to_find = ".c"
 
+# The provided test directory has multiple test cases:
+# Case 1: matching file in top level:               \t1.c
+# Case 2: non-matching file in top level:           \t1.h
+# Case 3: matching file one level deep              \subdir1\a.c
+# Case 4: non-matching file one level deep          \subdir2\.gitkeep
+# Case 5: matching file multiple levels deep        \subdir3\subsubdir1\b.c
+# Case 6: non-matching file multiple levels deep    \subdir3\subsubdir1\b.h
+
+# Expected results: testdir\t1.c, testdir\subdir1\a.c, testdir\subdir3\subsubdir1\b.c, testdir\subdir5\a.c,
 print(find_files(extension_to_find, path_to_check))

@@ -1,49 +1,102 @@
-import hashlib
-from datetime import datetime
+class Group(object):
+    def __init__(self, _name):
+        self.name = _name
+        self.groups = []
+        self.users = []
 
-class Block:
-    def __init__(self, data, previous_hash=None, previous_block=None):
-      self.timestamp = datetime.utcnow() #  Returns current timestamp in UTC (GMT) timezone
-      self.data = data
-      self.previous_hash = previous_hash
-      self.previous_block = previous_block
-      self.hash = self.calc_hash()
+    def add_group(self, group):
+        self.groups.append(group)
 
-    # Uses SHA256 to generate hash based on the data and timestamp
-    def calc_hash(self):
-        sha = hashlib.sha256()
-        hash_str = self.data.encode('utf-8')
-        hash_timestamp = str(self.timestamp).encode('utf-8')
-        sha.update(hash_str)
-        sha.update(hash_timestamp)
-        return sha.hexdigest()
+    def add_user(self, user):
+        self.users.append(user)
 
+    def get_groups(self):
+        return self.groups
 
-class Blockchain:
-    def __init__(self):
-        self.head = None
-        self.size = 0
-        self.tail = None
+    def get_users(self):
+        return self.users
 
-    def append(self, data):
-        if self.head is None:
-            self.head = Block(data)
-            self.tail = self.head
-            self.size += 1
-        else:
-            new_block = Block(data, self.tail.hash, self.tail)
-            self.tail = new_block
-            self.size += 1
-
-    def print_chain(self):
-        block_to_print = self.tail
-        while block_to_print is not None:
-            print(block_to_print.data)
-            block_to_print = block_to_print.previous_block
+    def get_name(self):
+        return self.name
 
 
-bc = Blockchain()
-bc.append("Hello World")
-bc.append("My name is Andy")
-bc.append("Here's my new cryptocurrency AndyCoin")
-bc.print_chain()
+def is_user_in_group(user, group, checked_groups=set()):
+    """
+    Return True if user is in the group, False otherwise.
+
+    Args:
+      user(str): user name/id
+      group(class:Group): group to check user membership against
+      checked_groups(set()): groups already checked (to prevent infinite recursion if any circular references)
+    """
+
+    if group.get_name() in checked_groups:
+        return False
+
+    # Check the users of the current group
+    for groupMember in group.get_users():
+        if groupMember == user:
+            return True
+
+    checked_groups.add(group.get_name())
+
+    # Recurse to check the users of subgroups
+    for subgroup in group.get_groups():
+        if is_user_in_group(user, subgroup, checked_groups):
+            return True
+
+    return False
+
+
+"""
+Sample Group Structure
+
+    ----All Employees----
+    |                   |
+Managers        ----Engineers----
+                |               |
+            Manufacturing    Design
+
+"""
+
+all_employees = Group("AllEmployees")
+all_employees.add_user("general_employee_1")
+all_employees.add_user("general_employee_2")
+all_employees.add_user("general_employee_3")
+
+managers = Group("Managers")
+managers.add_user("manager_1")
+managers.add_user("manager_2")
+managers.add_user("manager_3")
+
+engineers = Group("AllEngineers")
+engineers.add_user("general_engineer_1")
+engineers.add_user("general_engineer_2")
+engineers.add_user("general_engineer_3")
+
+manufacturing_engineers = Group("ManufacturingEngineers")
+manufacturing_engineers.add_user("me_user_1")
+manufacturing_engineers.add_user("me_user_2")
+manufacturing_engineers.add_user("me_user_3")
+
+design_engineers = Group("DesignEngineers")
+design_engineers.add_user("de_user_1")
+design_engineers.add_user("de_user_2")
+design_engineers.add_user("de_user_3")
+
+engineers.add_group(manufacturing_engineers)
+engineers.add_group(design_engineers)
+
+engineers.add_group(all_employees)  # Added circular reference (not sure if needed to test against this case)
+
+all_employees.add_group(engineers)
+all_employees.add_group(managers)
+
+# Test Case 1: User is in group
+print(is_user_in_group("general_employee_1", all_employees))  # Expected: True
+
+# Test Case 2: User is in sub-group
+print(is_user_in_group("de_user_2", all_employees))  # Expected: True
+
+# Test Case 3: User is not in group or subgroups
+print(is_user_in_group("not_a_user", all_employees))  # Expected: False

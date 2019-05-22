@@ -77,6 +77,8 @@ def intersection(llist_1, llist_2):
 
 
 # Test case 1
+# Duplicate values within each linked list
+# Overlapping values between the two linked lists
 
 linked_list_1 = LinkedList()
 linked_list_2 = LinkedList()
@@ -90,10 +92,12 @@ for i in element_1:
 for i in element_2:
     linked_list_2.append(i)
 
-print (union(linked_list_1, linked_list_2)) # Expected results: 3, 2, 35, 65, 6, 4, 21, 32, 9, 1, 11
-print (intersection(linked_list_1, linked_list_2)) # Expected results: 4, 6, 21
+print(union(linked_list_1, linked_list_2))  # Expected results: 3, 2, 35, 65, 6, 4, 21, 32, 9, 1, 11
+print(intersection(linked_list_1, linked_list_2))  # Expected results: 4, 6, 21
 
 # Test case 2
+# Duplicate values within each linked list
+# No overlapping values between the two linked lists (intersect should be empty)
 
 linked_list_3 = LinkedList()
 linked_list_4 = LinkedList()
@@ -107,5 +111,16 @@ for i in element_1:
 for i in element_2:
     linked_list_4.append(i)
 
-print (union(linked_list_3,linked_list_4))
-print (intersection(linked_list_3,linked_list_4))
+print(union(linked_list_3, linked_list_4))
+print(intersection(linked_list_3, linked_list_4))
+
+
+# Test case 3
+# Both linked lists are empty
+# Union and intersect should be empty
+
+linked_list_5 = LinkedList()
+linked_list_6 = LinkedList()
+
+print(union(linked_list_5, linked_list_6))
+print(intersection(linked_list_5, linked_list_6))
