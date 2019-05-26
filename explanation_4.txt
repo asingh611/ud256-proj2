@@ -1,0 +1,3 @@
+Problem 4
+
+Similar to Problem 2, recursion seemed to be a good option because there is a varying number of groups at various depths and you are performing the same search in each group. I tried to maintain a list of the groups already checked to avoid revisiting groups already checked. The runtime of my code would depend on how deep the groups are and how many users are in each group
