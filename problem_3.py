@@ -1,4 +1,5 @@
 import sys
+from collections import deque
 
 
 # Add Node and Tree classes
@@ -20,17 +21,46 @@ class Node:
     def get_right_child(self):
         return self.right
 
+    def has_left_child(self):
+        return self.left is not None
+
+    def has_right_child(self):
+        return self.right is not None
+
+    def get_value(self):
+        return self.value
+
     def __repr__(self):
         return str(self.value)
 
 
 class Tree:
-    def _init_(self, root):
+    def __init__(self, root):
         self.root = root
+
+    def get_root(self):
+        return self.root
+
+
+class Queue:
+    def __init__(self):
+        self.q = deque()
+
+    def enq(self, node, code):
+        self.q.appendleft([node, code])
+
+    def deq(self):
+        if len(self.q) > 0:
+            return self.q.pop()
+        else:
+            return None
+
+    def __len__(self):
+        return len(self.q)
 
 
 def huffman_encoding(data):
-    # Need to decide what the results would be for the edge cases
+    # TODO: Need to decide what the results would be for the edge cases
 
     # Based on string, get frequency of each character
     character_frequency = dict()
@@ -41,7 +71,6 @@ def huffman_encoding(data):
             character_frequency[character] = 1
 
     # Sort by frequency (descending so that we can pop the least frequent)
-    # TODO: Check if you can use a sorted dictionary (need to review time complexity)
     character_frequency_sorted = sorted(character_frequency.items(),
                                         key=lambda dictionary: dictionary[1],
                                         reverse=True)
@@ -52,6 +81,7 @@ def huffman_encoding(data):
     # Follow algorithm for building tree
     # Reference: https://www.siggraph.org/education/materials/HyperGraph/video/mpeg/mpegfaq/huffman_tutorial.html
 
+    # Keep combining and resorting into nodes until there is only one left
     while len(character_frequency_sorted) >= 2:
         # Get the two least frequent characters
         least_frequent = character_frequency_sorted.pop()
@@ -83,24 +113,110 @@ def huffman_encoding(data):
                                             key=lambda frequency_tuple: frequency_tuple[1],
                                             reverse=True)
 
+    # Create the tree with the remaining node
+    huffman_tree = Tree(node_storage[character_frequency_sorted[0][0]])
 
-    # Now that you have two nodes left, create the tree with the root node having the two remaining nodes
+    # Create a dictionary of character and encoded value for character
+    encoding_information = build_encoding(huffman_tree)
+    encoded_data = data
 
-    # Traverse tree and for each leaf, store key/value -> key = character; value = encoded
-    # Encode string one character at a time
-    # Return the encoded string and tree
-
-    pass
+    # Build the encoded string
+    for entry in reversed(encoding_information):
+        encoded_data = encoded_data.replace(entry[0], entry[1])
+    return encoded_data, huffman_tree
 
 
 def huffman_decoding(data, tree):
-    pass
+    decoding_information = build_encoding(tree)
+    decoded_string = data
+    for item in reversed(decoding_information):
+        decoded_string = decoded_string.replace(item[1], item[0])
+    return decoded_string
+
+
+def build_encoding(tree):
+    character_codes = list()
+    q = Queue()
+
+    # start at the root node and add it to the queue
+    node = tree.get_root()
+    q.enq(node, '01')
+    while len(q) > 0:
+        node, code = q.deq()
+        if node.has_left_child():
+            q.enq(node.get_left_child(), code + '0')
+        if node.has_right_child():
+            q.enq(node.get_right_child(), code + '11')
+        if not node.has_left_child() and not node.has_right_child():
+            character_codes.append([node.get_value(), code])
+    return character_codes
+
+# Method to create an encoding dictionary
+# def build_encoding(tree, current_code='0'):
+#     root = tree.get_root()
+#     character_codes = list()
+#     if root.get_right_child() is None and root.get_left_child() is None:
+#         character_codes.append([root.get_value(), current_code])
+#     if root.has_left_child():
+#         new_code = current_code + '0'
+#         subtree = Tree(root.get_left_child())
+#         subtree.get_root().set_left_child(root.get_left_child().get_left_child())
+#         subtree.get_root().set_right_child(root.get_left_child().get_right_child())
+#
+#         valuesToAdd = build_encoding(subtree, new_code)
+#         for value in valuesToAdd:
+#             character_codes.append([value[0], value[1]])
+#
+#     if root.has_right_child():
+#         new_code = current_code + '1'
+#         subtree = Tree(root.get_right_child())
+#         subtree.get_root().set_left_child(root.get_right_child().get_left_child())
+#         subtree.get_root().set_right_child(root.get_right_child().get_right_child())
+#
+#         valuesToAdd = build_encoding(subtree, new_code)
+#         for value in valuesToAdd:
+#             character_codes.append([value[0], value[1]])
+#     return character_codes
+
+
+# # Method to create an encoding dictionary
+# def build_encoding(tree, current_code='0'):
+#     root = tree.get_root()
+#     character_codes = dict()
+#     if root.get_right_child() is None and root.get_left_child() is None:
+#         character_codes[root.get_value()] = current_code
+#     if root.has_left_child():
+#         new_code = current_code + '0'
+#         subtree = Tree(root.get_left_child())
+#         subtree.get_root().set_left_child(root.get_left_child().get_left_child())
+#         subtree.get_root().set_right_child(root.get_left_child().get_right_child())
+#
+#         valuesToAdd = build_encoding(subtree, new_code)
+#         for value in valuesToAdd:
+#             character_codes[value] = valuesToAdd[value]
+#
+#     if root.has_right_child():
+#         new_code = current_code + '1'
+#         subtree = Tree(root.get_right_child())
+#         subtree.get_root().set_left_child(root.get_right_child().get_left_child())
+#         subtree.get_root().set_right_child(root.get_right_child().get_right_child())
+#
+#         valuesToAdd = build_encoding(subtree, new_code)
+#         for value in valuesToAdd:
+#             character_codes[value] = valuesToAdd[value]
+#     return character_codes
 
 
 if __name__ == "__main__":
     codes = {}
 
-    a_great_sentence = "The bird is the word"
+    # a_great_sentence = "The bird is the word"
+
+    # a_great_sentence = "Here is a new sentence to encode"
+
+    # a_great_sentence = "Let's get crazy and encode this!"
+
+    a_great_sentence = "aa"
 
     print("The size of the data is: {}\n".format(sys.getsizeof(a_great_sentence)))
     print("The content of the data is: {}\n".format(a_great_sentence))
