@@ -60,8 +60,9 @@ class Queue:
 
 
 def huffman_encoding(data):
-    # TODO: Need to decide what the results would be for the edge cases
-
+    # Edge case 1: Empty string
+    if data == "":
+        return "0", None
     # Based on string, get frequency of each character
     character_frequency = dict()
     for character in data:
@@ -113,8 +114,12 @@ def huffman_encoding(data):
                                             key=lambda frequency_tuple: frequency_tuple[1],
                                             reverse=True)
 
-    # Create the tree with the remaining node
-    huffman_tree = Tree(node_storage[character_frequency_sorted[0][0]])
+    # Edge case 2: Input string contains only one character
+    if len(node_storage) == 0:
+        huffman_tree = Tree(Node(character_frequency_sorted[0][0]))
+    else:
+        # Create the tree with the remaining node
+        huffman_tree = Tree(node_storage[character_frequency_sorted[0][0]])
 
     # Create a dictionary of character and encoded value for character
     encoding_information = build_encoding(huffman_tree)
@@ -127,6 +132,9 @@ def huffman_encoding(data):
 
 
 def huffman_decoding(data, tree):
+    # Case 1: Input was blank ("")
+    if data == "0":
+        return ""
     decoding_information = build_encoding(tree)
     decoded_string = data
     for item in reversed(decoding_information):
@@ -212,11 +220,11 @@ if __name__ == "__main__":
 
     # a_great_sentence = "The bird is the word"
 
-    # a_great_sentence = "Here is a new sentence to encode"
+    # a_great_sentence = "Here is a sentence to encode"
 
     # a_great_sentence = "Let's get crazy and encode this!"
 
-    a_great_sentence = "aa"
+    a_great_sentence = ""
 
     print("The size of the data is: {}\n".format(sys.getsizeof(a_great_sentence)))
     print("The content of the data is: {}\n".format(a_great_sentence))
