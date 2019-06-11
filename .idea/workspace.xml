@@ -36,8 +36,8 @@
       <file leaf-file-name="problem_3.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/problem_3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="135" column="18" lean-forward="false" selection-start-line="135" selection-start-column="18" selection-end-line="135" selection-end-column="18" />
+            <state relative-caret-position="144">
+              <caret line="181" column="48" lean-forward="false" selection-start-line="181" selection-start-column="48" selection-end-line="181" selection-end-column="48" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -295,18 +295,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/problem_3.py</url>
-          <line>79</line>
-          <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/problem_3.py</url>
-          <line>85</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-      </breakpoints>
       <option name="time" value="20" />
     </breakpoint-manager>
     <watches-manager>
@@ -734,8 +722,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/problem_3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="135" column="18" lean-forward="false" selection-start-line="135" selection-start-column="18" selection-end-line="135" selection-end-column="18" />
+        <state relative-caret-position="144">
+          <caret line="181" column="48" lean-forward="false" selection-start-line="181" selection-start-column="48" selection-end-line="181" selection-end-column="48" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

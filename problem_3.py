@@ -59,6 +59,10 @@ class Queue:
         return len(self.q)
 
 
+# Method for encoding an input string
+# Input: data (string) - string to encode
+# Output: encoded_data (string) - encoded string
+#         huffman_tree (Tree) - tree structure for decoding
 def huffman_encoding(data):
     # Edge case 1: Empty string
     if data == "":
@@ -82,7 +86,7 @@ def huffman_encoding(data):
     # Follow algorithm for building tree
     # Reference: https://www.siggraph.org/education/materials/HyperGraph/video/mpeg/mpegfaq/huffman_tutorial.html
 
-    # Keep combining and resorting into nodes until there is only one left
+    # Keep combining and resorting until there is only one entry left
     while len(character_frequency_sorted) >= 2:
         # Get the two least frequent characters
         least_frequent = character_frequency_sorted.pop()
@@ -97,7 +101,7 @@ def huffman_encoding(data):
             # Otherwise create a new child node
             parent_node.set_left_child(Node(least_frequent[0]))
 
-        # Do the same for the right child
+        # Do the same for the right child (check if node already exists)
         if next_least_frequent[0] in node_storage:
             parent_node.set_right_child(node_storage[next_least_frequent[0]])
         else:
@@ -114,7 +118,7 @@ def huffman_encoding(data):
                                             key=lambda frequency_tuple: frequency_tuple[1],
                                             reverse=True)
 
-    # Edge case 2: Input string contains only one character
+    # Edge case 2: Input string contains only one character (example: 'aaaaaa')
     if len(node_storage) == 0:
         huffman_tree = Tree(Node(character_frequency_sorted[0][0]))
     else:
@@ -131,6 +135,10 @@ def huffman_encoding(data):
     return encoded_data, huffman_tree
 
 
+# Method for decoding an input string
+# Input: data (string) - string to decode
+#        tree (Tree) - Huffman tree used to encode string
+# Output: decoded_string (string) - decoded string
 def huffman_decoding(data, tree):
     # Case 1: Input was blank ("")
     if data == "0":
@@ -142,6 +150,7 @@ def huffman_decoding(data, tree):
     return decoded_string
 
 
+# Helper function for generating codes for each character based on the provided tree to be used in encoding/decoding
 def build_encoding(tree):
     character_codes = list()
     q = Queue()
@@ -159,82 +168,27 @@ def build_encoding(tree):
             character_codes.append([node.get_value(), code])
     return character_codes
 
-# Method to create an encoding dictionary
-# def build_encoding(tree, current_code='0'):
-#     root = tree.get_root()
-#     character_codes = list()
-#     if root.get_right_child() is None and root.get_left_child() is None:
-#         character_codes.append([root.get_value(), current_code])
-#     if root.has_left_child():
-#         new_code = current_code + '0'
-#         subtree = Tree(root.get_left_child())
-#         subtree.get_root().set_left_child(root.get_left_child().get_left_child())
-#         subtree.get_root().set_right_child(root.get_left_child().get_right_child())
-#
-#         valuesToAdd = build_encoding(subtree, new_code)
-#         for value in valuesToAdd:
-#             character_codes.append([value[0], value[1]])
-#
-#     if root.has_right_child():
-#         new_code = current_code + '1'
-#         subtree = Tree(root.get_right_child())
-#         subtree.get_root().set_left_child(root.get_right_child().get_left_child())
-#         subtree.get_root().set_right_child(root.get_right_child().get_right_child())
-#
-#         valuesToAdd = build_encoding(subtree, new_code)
-#         for value in valuesToAdd:
-#             character_codes.append([value[0], value[1]])
-#     return character_codes
-
-
-# # Method to create an encoding dictionary
-# def build_encoding(tree, current_code='0'):
-#     root = tree.get_root()
-#     character_codes = dict()
-#     if root.get_right_child() is None and root.get_left_child() is None:
-#         character_codes[root.get_value()] = current_code
-#     if root.has_left_child():
-#         new_code = current_code + '0'
-#         subtree = Tree(root.get_left_child())
-#         subtree.get_root().set_left_child(root.get_left_child().get_left_child())
-#         subtree.get_root().set_right_child(root.get_left_child().get_right_child())
-#
-#         valuesToAdd = build_encoding(subtree, new_code)
-#         for value in valuesToAdd:
-#             character_codes[value] = valuesToAdd[value]
-#
-#     if root.has_right_child():
-#         new_code = current_code + '1'
-#         subtree = Tree(root.get_right_child())
-#         subtree.get_root().set_left_child(root.get_right_child().get_left_child())
-#         subtree.get_root().set_right_child(root.get_right_child().get_right_child())
-#
-#         valuesToAdd = build_encoding(subtree, new_code)
-#         for value in valuesToAdd:
-#             character_codes[value] = valuesToAdd[value]
-#     return character_codes
-
 
 if __name__ == "__main__":
     codes = {}
 
-    # a_great_sentence = "The bird is the word"
+    # Case 1: Normal sentence
+    # Case 2: Another normal sentence
+    # Case 3: (Edge case) Blank input ""
+    # Case 4: (Edge case) Repeated same character "aaaaa"
 
-    # a_great_sentence = "Here is a sentence to encode"
+    sentences_to_encode = ["The bird is the word", "Here is a sentence to encode", "", "aaaaa"]
 
-    # a_great_sentence = "Let's get crazy and encode this!"
+    for a_great_sentence in sentences_to_encode:
+        print("The size of the data is: {}\n".format(sys.getsizeof(a_great_sentence)))
+        print("The content of the data is: {}\n".format(a_great_sentence))
 
-    a_great_sentence = ""
+        encoded_data, tree = huffman_encoding(a_great_sentence)
 
-    print("The size of the data is: {}\n".format(sys.getsizeof(a_great_sentence)))
-    print("The content of the data is: {}\n".format(a_great_sentence))
+        print("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
+        print("The content of the encoded data is: {}\n".format(encoded_data))
 
-    encoded_data, tree = huffman_encoding(a_great_sentence)
+        decoded_data = huffman_decoding(encoded_data, tree)
 
-    print("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
-    print("The content of the encoded data is: {}\n".format(encoded_data))
-
-    decoded_data = huffman_decoding(encoded_data, tree)
-
-    print("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
-    print("The content of the encoded data is: {}\n".format(decoded_data))
+        print("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
+        print("The content of the encoded data is: {}\n".format(decoded_data))
