@@ -1,5 +1,5 @@
 Problem 6
 
-For the union of the linked lists, I used a set to hold the values while I iterated through each linked list. A set works well since it only maintains unique values. Since I'm iterating through each linked list, the run time would be O(n1+n2) where n1 and n2 are the number of items in each linked list. 
+For the union of the linked lists, I used a set to hold the values while I iterated through each linked list. A set works well since it only maintains unique values. Since I'm iterating through each linked list, the run time would be O(n1+n2) where n1 and n2 are the number of items in each linked list. The space complexity would depend on the number of unique numbers between both linked lists
 
-For the intersection I used two sets. One set holds the values of the first linked list for lookup purposes since looking up values in a set is O(1). The second set is populated with numbers from the second linked list that is also in the first set. Since I'm iterating through each linked list, the run time would also be O(n1+n2)
+For the intersection I used two sets. One set holds the values of the first linked list for lookup purposes since looking up values in a set is O(1). The second set is populated with numbers from the second linked list that is also in the first set. Since I'm iterating through each linked list, the run time would also be O(n1+n2). The space complexity would be the number of unique numbers in the first linked list plus the number of unique values that are common between the first and second linked lists

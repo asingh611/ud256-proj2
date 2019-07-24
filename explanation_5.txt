@@ -1,3 +1,5 @@
 Problem 5
 
-For this problem, I implemented the hashing for the block to be based on the data string, the time created and the previous hash to ensure uniqueness. Basing it only on the data string for example could cause the same hash to be generated if two blocks contained the same data string. In the Blockchain class, the tail is tracked so that adding a block to the end of the Blockchain can be O(1). Printing the chain will iterate through all the blocks so that will be O(n) 
+For this problem, I implemented the hashing for the block to be based on the data string, the time created and the previous hash to ensure uniqueness. Basing it only on the data string for example could cause the same hash to be generated if two blocks contained the same data string. In the Blockchain class, the tail is tracked so that adding a block to the end of the Blockchain can be O(1). Printing the chain will iterate through all the blocks so that will be O(n). 
+
+In terms of the space complexity, the blockchain is storing references to the head and tail to make getting to the front and end easy, as well as the size of the blockchain. Each block stores values related to that current block as well as a reference to the previous block. The overall space complexity would depend on the number of blocks

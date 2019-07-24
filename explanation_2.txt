@@ -1,3 +1,7 @@
 Problem 2
 
-For this problem, recursion seemed to be a good option because there is a varying number of folders at various depths and you are performing the same search in each folder. I utilized the provided sample folder structure as my test cases. The runtime of my code would depend on how deep the folder structure is and how many files are in each folder
+For this problem, recursion seemed to be a good option because there is a varying number of folders at various depths and you are performing the same search in each folder. I utilized the provided sample folder structure as my test cases. 
+
+Within each recursion, if the input is a directory, then for each item in the directory, recurse and add each returned values to the current list of files. Since there is a loop within a loop, I believe it would be O(n^2) runtime for that portion of the code. If the input to the recursive function is a file that ends with .c, then append it to the list of files (which would be O(1))
+
+For space complexity, then only storage I am using is the list that contains all of the matching files. The size of that will depend on the number of matches.

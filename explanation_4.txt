@@ -1,3 +1,7 @@
 Problem 4
 
-Similar to Problem 2, recursion seemed to be a good option because there is a varying number of groups at various depths and you are performing the same search in each group. I tried to maintain a list of the groups already checked to avoid revisiting groups already checked. The runtime of my code would depend on how deep the groups are and how many users are in each group
+Similar to Problem 2, recursion seemed to be a good option because there is a varying number of groups at various depths and you are performing the same search in each group. I tried to maintain a list of the groups already checked to avoid revisiting groups already checked if there are any circular references. 
+
+Within each recursion, there is a check to see if the current group has already been checked, which is O(1) since it checks against a set. Then the list of users for this group are checked, which is an O(n) operation. Then we recurse for each subgroup within the group, which is O(n).
+
+The set is the only storage being used in this problem and the space complexity would depend on the number of unique groups encountered.
